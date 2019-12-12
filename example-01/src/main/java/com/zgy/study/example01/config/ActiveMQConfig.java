@@ -71,8 +71,7 @@ public class ActiveMQConfig {
 
     @Bean
     public ActiveMQQueue activeMQQueue() {
-        ActiveMQQueue queue = new ActiveMQQueue(queueName);
-        return queue;
+        return new ActiveMQQueue(queueName);
     }
 
     @Bean
@@ -93,14 +92,14 @@ public class ActiveMQConfig {
         DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
         container.setConnectionFactory(singleConnectionFactory());
         container.setDestination(activeMQQueue());
-        container.setMessageListener(maxConnections);
+        container.setMessageListener(msgQueueMessageListener());
         return container;
     }
 
     private class MsgQueueMessageListener implements SessionAwareMessageListener<Message> {
         @Override
         public void onMessage(Message message, Session session) throws JMSException {
-            LOGGER.info("消费者获取到的信心：[{}]", ((TextMessage)message).getText());
+            LOGGER.info("消费者获取到的信息：[{}]", ((TextMessage)message).getText());
         }
     }
 }
