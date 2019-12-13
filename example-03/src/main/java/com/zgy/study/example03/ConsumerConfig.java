@@ -6,12 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.connection.SingleConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
-
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
@@ -23,7 +21,6 @@ import javax.jms.TextMessage;
  * @description ConsumerConfig
  */
 @Configuration
-@EnableJms
 public class ConsumerConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerConfig.class);
