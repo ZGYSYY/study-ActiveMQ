@@ -16,11 +16,14 @@ public class JmsSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(JmsSender.class);
 
     public static void main(String[] args) {
+        // 创建连接工厂
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.1.166:61616");
         Connection connection = null;
         try {
             // 创建连接
             connection = connectionFactory.createConnection();
+
+            // 开始连接
             connection.start();
 
             // 创建会话
