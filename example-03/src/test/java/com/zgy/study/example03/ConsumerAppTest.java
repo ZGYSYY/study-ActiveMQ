@@ -8,16 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
 import java.io.IOException;
 
 /**
  * @author ZGY
  * @date 2019/12/13 16:06
- * @description ConsumerAppTest
+ * @description ConsumerAppTest，将消息监听器配置在代码中。
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ConsumerConfig.class)
