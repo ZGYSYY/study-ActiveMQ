@@ -1,5 +1,6 @@
 package com.zgy.study.example01.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -8,5 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * @description SpringConfig
  */
 @Configuration
+@ComponentScan(basePackages = "com.zgy.study.example01")
 public class SpringConfig {
 }
