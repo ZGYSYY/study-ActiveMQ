@@ -8,41 +8,27 @@ import javax.jms.*;
 
 /**
  * @author ZGY
- * @date 2019/12/13 11:14
- * @description JmsSender，发送端。
+ * @date 2019/12/13 11:51
+ * @description JmsReceiver，消费端。
  */
-public class JmsSender {
+public class JmsReceiver {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JmsSender.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JmsReceiver.class);
 
     public static void main(String[] args) {
-        // 创建连接工厂
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.1.166:61616");
         Connection connection = null;
         try {
-            // 创建连接
             connection = connectionFactory.createConnection();
-
-            // 开始连接
             connection.start();
-
-            // 创建会话
-            Session session = connection.createSession(Boolean.FALSE, Session.CLIENT_ACKNOWLEDGE);
-
-            // 创建目标
+            Session session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
             Destination destination = session.createQueue("queue");
-
-            // 创建生产者
-            MessageProducer producer = session.createProducer(destination);
-
-            // 创建消息
-            TextMessage textMessage = session.createTextMessage("Hello ActiveMQ");
-
-            // 发送消息
-            producer.send(textMessage);
-            LOGGER.info("发送成功，textMessage：[{}]", textMessage);
-
-            // 关闭会话
+            // 创建消费之
+            MessageConsumer consumer = session.createConsumer(destination);
+            // 获取消息
+            TextMessage textMessage = (TextMessage) consumer.receive();
+            LOGGER.info("textMessage: [{}]", textMessage.getText());
+            session.commit();
             session.close();
         } catch (JMSException e) {
             LOGGER.error("创建连接异常！", e);
