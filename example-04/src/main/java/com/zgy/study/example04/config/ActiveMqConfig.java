@@ -1,5 +1,6 @@
 package com.zgy.study.example04.config;
 
+import com.zgy.study.example04.message.listener.MyMessageListener;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
@@ -8,8 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.jms.listener.MessageListenerContainer;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 
 /**
  * @author: ZGY
@@ -23,13 +27,30 @@ public class ActiveMqConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMqConfig.class);
 
+    private ConnectionFactory connectionFactory() {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://192.168.31.66:61616");
+        return factory;
+    }
+
+    private Destination destination() {
+        ActiveMQQueue activeMQQueue = new ActiveMQQueue("test-queue");
+        return activeMQQueue;
+    }
+
     @Bean
     public JmsTemplate jmsTemplate() {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://192.168.31.66:61616");
-        JmsTemplate jmsTemplate = new JmsTemplate(factory);
-        ActiveMQQueue activeMQQueue = new ActiveMQQueue("test-queue");
-        jmsTemplate.setDefaultDestination(activeMQQueue);
+        JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory());
+        jmsTemplate.setDefaultDestination(destination());
         jmsTemplate.setReceiveTimeout(10000L);
         return jmsTemplate;
+    }
+
+    @Bean
+    public MessageListenerContainer messageListenerContainer() {
+        DefaultMessageListenerContainer listenerContainer = new DefaultMessageListenerContainer();
+        listenerContainer.setConnectionFactory(connectionFactory());
+        listenerContainer.setDestination(destination());
+        listenerContainer.setMessageListener(new MyMessageListener());
+        return listenerContainer;
     }
 }
