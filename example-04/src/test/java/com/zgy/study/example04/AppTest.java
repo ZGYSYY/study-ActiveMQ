@@ -1,6 +1,7 @@
 package com.zgy.study.example04;
 
 import com.zgy.study.example04.config.ActiveMqConfig;
+import com.zgy.study.example04.service.ConsumerService;
 import com.zgy.study.example04.service.ProducerService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Test;
@@ -22,6 +23,9 @@ public class AppTest {
     @Autowired
     private ProducerService producerService;
 
+    @Autowired
+    private ConsumerService consumerService;
+
     /**
      * 发送消息到默认目标测试
      */
@@ -37,5 +41,13 @@ public class AppTest {
     public void test2() {
         ActiveMQQueue queue = new ActiveMQQueue("test-queue2");
         producerService.sendMessage(queue, "老子明天不上班！");
+    }
+
+    /**
+     * 接收指定目标的消息测试
+     */
+    @Test
+    public void test3() {
+        consumerService.receive(new ActiveMQQueue("test-queue2"));
     }
 }
