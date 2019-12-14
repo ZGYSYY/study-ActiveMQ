@@ -3,6 +3,7 @@ package com.zgy.study.example04.config;
 import com.zgy.study.example04.message.listener.MyMessageListener;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,11 @@ public class ActiveMqConfig {
         return activeMQQueue;
     }
 
+    private Destination topicDestination() {
+        ActiveMQTopic activeMQTopic = new ActiveMQTopic("test-topic");
+        return activeMQTopic;
+    }
+
     @Bean
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory());
@@ -46,10 +52,28 @@ public class ActiveMqConfig {
     }
 
     @Bean
+    public JmsTemplate topicJmsTemplate() {
+        JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory());
+        jmsTemplate.setDefaultDestination(new ActiveMQTopic("test-topic"));
+        jmsTemplate.setPubSubDomain(true);
+        jmsTemplate.setReceiveTimeout(10000L);
+        return jmsTemplate;
+    }
+
+    @Bean
     public MessageListenerContainer messageListenerContainer() {
         DefaultMessageListenerContainer listenerContainer = new DefaultMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory());
         listenerContainer.setDestination(destination());
+        listenerContainer.setMessageListener(new MyMessageListener());
+        return listenerContainer;
+    }
+
+    @Bean
+    public MessageListenerContainer topicMessageListener() {
+        DefaultMessageListenerContainer listenerContainer = new DefaultMessageListenerContainer();
+        listenerContainer.setConnectionFactory(connectionFactory());
+        listenerContainer.setDestination(topicDestination());
         listenerContainer.setMessageListener(new MyMessageListener());
         return listenerContainer;
     }

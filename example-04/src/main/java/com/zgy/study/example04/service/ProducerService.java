@@ -22,4 +22,10 @@ public interface ProducerService {
      * @param message
      */
     void sendMessage(String message);
+
+    /**
+     * 向默认目标广播消息
+     * @param message
+     */
+    void publish(String message);
 }

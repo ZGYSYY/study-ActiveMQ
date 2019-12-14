@@ -11,8 +11,14 @@ import javax.jms.Destination;
 public interface ConsumerService {
 
     /**
-     * 接收消息
+     * 接收指定目标的消息
      * @param destination
      */
     void receive(Destination destination);
+
+    /**
+     * 接收指定目标广播的消息
+     * @param destination
+     */
+    void topicReceive(Destination destination);
 }

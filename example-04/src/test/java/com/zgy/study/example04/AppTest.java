@@ -4,6 +4,7 @@ import com.zgy.study.example04.config.ActiveMqConfig;
 import com.zgy.study.example04.service.ConsumerService;
 import com.zgy.study.example04.service.ProducerService;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,13 @@ public class AppTest {
     @Test
     public void test3() {
         consumerService.receive(new ActiveMQQueue("test-queue2"));
+    }
+
+    /**
+     * 向指定目标广播消息测试
+     */
+    @Test
+    public void test4() {
+        producerService.publish("同志们辛苦了！");
     }
 }

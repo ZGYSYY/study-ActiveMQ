@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,9 +27,22 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
+    @Resource(name = "topicJmsTemplate")
+    private JmsTemplate topicJmsTemplate;
+
     @Override
     public void receive(Destination destination) {
         TextMessage message = (TextMessage) jmsTemplate.receive(destination);
+        try {
+            LOGGER.info("从目标 destination: [{}]，收到的消息为{}", destination, message.getText());
+        } catch (JMSException e) {
+            LOGGER.error("从目标获取消息发生异常！", e);
+        }
+    }
+
+    @Override
+    public void topicReceive(Destination destination) {
+        TextMessage message = (TextMessage) topicJmsTemplate.receive(destination);
         try {
             LOGGER.info("从目标 destination: [{}]，收到的消息为{}", destination, message.getText());
         } catch (JMSException e) {
