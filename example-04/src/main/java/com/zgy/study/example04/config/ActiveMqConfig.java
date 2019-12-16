@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.MessageListenerContainer;
-
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 
@@ -29,7 +28,7 @@ public class ActiveMqConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMqConfig.class);
 
     private ConnectionFactory connectionFactory() {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://192.168.31.66:61616");
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://192.168.1.166:61616");
         return factory;
     }
 
